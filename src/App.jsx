@@ -17,7 +17,7 @@ import AccessDenied from './pages/AccessDenied';
 
 const App = () => {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/users">
       <AuthProvider>
         <Routes>
           <Route path="/login" element={<Login />} />
