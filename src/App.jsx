@@ -22,7 +22,7 @@ const App = () => {
         <Routes>
           <Route path="/login" element={<Login />} />
           
-          <Route path="/" element={
+          <Route path="/dashboard" element={
             <ProtectedRoute adminOnly={true}>
               <Layout>
                 <Dashboard />
@@ -74,7 +74,7 @@ const App = () => {
 
 
 
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

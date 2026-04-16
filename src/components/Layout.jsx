@@ -48,7 +48,7 @@ const Layout = ({ children }) => {
         </div>
 
         <nav className="flex-1 px-4 mt-6 space-y-2 overflow-y-auto custom-scrollbar">
-          <SidebarItem to="/" icon={LayoutDashboard} label="Dashboard" />
+          <SidebarItem to="/dashboard" icon={LayoutDashboard} label="Dashboard" />
           <SidebarItem to="/users" icon={Users} label="Users" />
           <SidebarItem to="/roles" icon={Shield} label="Roles" />
           <SidebarItem to="/permissions" icon={Lock} label="Permissions" />
