@@ -13,6 +13,7 @@ import Permissions from './pages/Permissions';
 import Applications from './pages/Applications';
 import Sessions from './pages/Sessions';
 import AccessDenied from './pages/AccessDenied';
+import UserDetailsPage from './pages/UserDetailsPage';
 
 
 const App = () => {
@@ -34,6 +35,14 @@ const App = () => {
             <ProtectedRoute adminOnly={true}>
               <Layout>
                 <Users />
+              </Layout>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/users/:userId" element={
+            <ProtectedRoute adminOnly={true}>
+              <Layout>
+                <UserDetailsPage />
               </Layout>
             </ProtectedRoute>
           } />

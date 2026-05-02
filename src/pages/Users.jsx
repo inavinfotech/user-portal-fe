@@ -13,9 +13,11 @@ import {
   Check,
   Loader2,
   Lock,
-  User as UserIcon
+  User as UserIcon,
+  Eye
 } from 'lucide-react';
 import { cn } from '../utils/cn';
+import { useNavigate } from 'react-router-dom';
 
 const UserModal = ({ isOpen, onClose, onSubmit, availableRoles, editingUser }) => {
   const [formData, setFormData] = useState({
@@ -182,6 +184,7 @@ const UserModal = ({ isOpen, onClose, onSubmit, availableRoles, editingUser }) =
 };
 
 const Users = () => {
+  const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [availableRoles, setAvailableRoles] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -367,8 +370,16 @@ const Users = () => {
                     <td className="px-8 py-5">
                        <div className="flex items-center justify-center gap-2">
                           <button 
+                            onClick={() => navigate(`/users/${user.id}`)}
+                            className="p-2 text-gray-400 hover:text-primary-600 hover:bg-primary-100 rounded-xl transition-all"
+                            title="View Details"
+                          >
+                            <Eye size={18} />
+                          </button>
+                          <button 
                             onClick={() => openEditModal(user)}
                             className="p-2 text-gray-400 hover:text-primary-600 hover:bg-primary-100 rounded-xl transition-all"
+                            title="Edit User"
                           >
                             <Edit size={18} />
                           </button>
