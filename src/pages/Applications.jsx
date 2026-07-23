@@ -14,6 +14,7 @@ import {
   Loader2,
   Edit3
 } from 'lucide-react';
+import { cn } from '../utils/cn';
 
 const Applications = () => {
   const [apps, setApps] = useState([]);
@@ -132,52 +133,47 @@ const Applications = () => {
   };
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-700">
-      <header className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-           <div className="w-12 h-12 bg-amber-100 rounded-2xl flex items-center justify-center text-amber-600 shadow-sm">
-              <Key size={24} />
-           </div>
-           <div>
-              <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight leading-none mb-1">Applications & API Keys</h1>
-              <p className="text-gray-500 text-sm font-medium">Manage external microservices and their authentication credentials.</p>
-           </div>
+    <div className="space-y-6">
+      <div className="flex justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Registered Applications</h2>
+          <p className="text-gray-500 text-sm mt-1">Manage external microservices and API authentication credentials.</p>
         </div>
         <button 
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 px-5 py-2.5 bg-amber-600 text-white text-sm font-bold rounded-xl shadow-lg shadow-amber-500/30 hover:bg-amber-700 transition-all active:scale-95"
+          className="bg-primary-600 text-white px-5 py-2.5 rounded-xl font-bold flex items-center gap-2 hover:bg-primary-700 shadow-lg shadow-primary-500/20 active:scale-95 transition-all"
         >
           <Plus size={18} />
           <span>Register New App</span>
         </button>
-      </header>
+      </div>
 
-      <div className="grid grid-cols-1 gap-8">
+      <div className="grid grid-cols-1 gap-6">
         {loading ? (
-          <div className="py-20 text-center font-bold text-gray-400 uppercase tracking-widest animate-pulse flex items-center justify-center gap-3">
-             <Cpu className="animate-spin" size={24} />
-             Decrypting Integration Tokens...
+          <div className="py-16 text-center text-gray-400 font-medium italic">
+             Loading applications data...
           </div>
         ) : apps.length === 0 ? (
-          <div className="bg-white rounded-3xl p-16 text-center border-2 border-dashed border-gray-100 shadow-sm flex flex-col items-center">
-             <Key className="text-gray-100 mb-6" size={80} />
-             <p className="text-gray-400 font-bold uppercase tracking-widest text-lg">No external applications registered</p>
-             <p className="text-gray-300 text-sm mt-2 max-w-sm">Connect your microservices to the central portal to enable ecosystem authentication.</p>
+          <div className="bg-white rounded-2xl p-12 text-center border border-dashed border-gray-200 shadow-sm flex flex-col items-center">
+             <Key className="text-gray-300 mb-3" size={48} />
+             <p className="text-gray-500 font-bold">No external applications registered</p>
+             <p className="text-gray-400 text-sm mt-1 max-w-sm">Register microservices to generate API keys and secret tokens.</p>
           </div>
         ) : (
           apps.map(app => (
-            <div key={app.id} className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 relative overflow-hidden group">
-               <div className="absolute top-0 right-0 w-32 h-32 bg-amber-50 rounded-bl-full -mr-16 -mt-16 opacity-0 group-hover:opacity-40 transition-opacity" />
-               
-               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
-                 <div className="flex items-start gap-5 flex-1">
-                    <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center text-amber-600 shrink-0 border border-gray-100 group-hover:bg-amber-600 group-hover:text-white transition-all duration-300 shadow-sm">
-                       <Cpu size={28} />
+            <div key={app.id} className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                 <div className="flex items-start gap-4 flex-1">
+                    <div className="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center text-primary-600 shrink-0">
+                       <Cpu size={24} />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-3 mb-1">
                         <h3 className="text-xl font-bold text-gray-900 tracking-tight truncate">{app.name}</h3>
-                        <span className="px-2.5 py-1 bg-green-50 text-green-600 text-[10px] font-black rounded-lg border border-green-100 uppercase tracking-widest shrink-0">
+                        <span className={cn(
+                          "px-2.5 py-0.5 text-xs font-bold rounded-full uppercase border",
+                          app.is_active ? "bg-emerald-50 text-emerald-600 border-emerald-100" : "bg-gray-100 text-gray-500 border-gray-200"
+                        )}>
                            {app.is_active ? 'Active' : 'Inactive'}
                         </span>
                       </div>
@@ -185,87 +181,73 @@ const Applications = () => {
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-1">
-                          <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">App ID</label>
+                          <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">App ID</label>
                           <div className="flex items-center gap-2">
-                             <code className="px-3 py-1.5 bg-gray-50 border border-gray-100 rounded-lg text-[11px] font-mono text-gray-500 break-all select-all">
+                             <code className="px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-xs font-mono text-gray-600 break-all select-all flex-1">
                                {app.id}
                              </code>
                              <button 
                                onClick={() => copyToClipboard(app.id)}
-                               className="p-1.5 text-gray-400 hover:text-amber-600 transition-colors"
+                               className="p-1.5 text-gray-400 hover:text-primary-600 transition-colors"
                              >
-                               {copiedKey === app.id ? <CheckCircle className="text-green-500" size={14} /> : <Copy size={14} />}
+                               {copiedKey === app.id ? <CheckCircle className="text-emerald-500" size={16} /> : <Copy size={16} />}
                              </button>
                           </div>
                         </div>
 
                         <div className="space-y-1">
-                          <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">API Key</label>
+                          <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">API Key (Client ID)</label>
                           <div className="flex items-center gap-2">
-                             <code className="px-3 py-1.5 bg-gray-50 border border-gray-100 rounded-lg text-[11px] font-mono text-gray-500 break-all select-all">
+                             <code className="px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-xs font-mono text-gray-600 break-all select-all flex-1">
                                {app.client_id}
                              </code>
                              <button 
                                onClick={() => copyToClipboard(app.client_id)}
-                               className="p-1.5 text-gray-400 hover:text-amber-600 transition-colors"
+                               className="p-1.5 text-gray-400 hover:text-primary-600 transition-colors"
                              >
-                               {copiedKey === app.client_id ? <CheckCircle className="text-green-500" size={14} /> : <Copy size={14} />}
+                               {copiedKey === app.client_id ? <CheckCircle className="text-emerald-500" size={16} /> : <Copy size={16} />}
                              </button>
                           </div>
                         </div>
                       </div>
 
-                      <div className="mt-4 flex flex-col gap-2">
-                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">API Secret</label>
-                        <div className="flex items-center gap-2 group/key">
-                            <code className="px-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm font-mono text-gray-400 flex-1 italic">
+                      <div className="mt-3 flex flex-col gap-1">
+                        <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">API Secret</label>
+                        <div className="flex items-center gap-2">
+                            <code className="px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-xs font-mono text-gray-400 flex-1 italic">
                               ••••••••••••••••••••••••••••••••••••••••
                             </code>
-                            <div className="px-3 py-1 bg-amber-50 text-amber-600 text-[10px] font-black rounded-lg uppercase tracking-widest border border-amber-100 italic shrink-0">
+                            <span className="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-lg border border-emerald-100">
                                Hashed & Secure
-                            </div>
+                            </span>
                         </div>
                       </div>
                     </div>
                  </div>
 
-                 <div className="flex flex-row lg:flex-col items-center lg:items-end gap-3 shrink-0 pt-4 lg:pt-0">
+                 <div className="flex flex-row lg:flex-col items-center lg:items-end gap-2 shrink-0 pt-2 lg:pt-0">
                     <button 
                       onClick={() => openEditModal(app)}
-                      className="flex items-center gap-2 px-4 py-2 text-xs font-bold text-amber-600 bg-amber-50 hover:bg-amber-100 rounded-xl border border-amber-100 transition-all"
+                      className="flex items-center gap-2 px-4 py-2 text-xs font-bold text-primary-600 bg-primary-50 hover:bg-primary-100 rounded-xl transition-all"
                     >
                       <Edit3 size={14} />
                       Edit Name
                     </button>
                     <button 
                       onClick={() => regenerateKey(app.client_id)}
-                      className="flex items-center gap-2 px-4 py-2 text-xs font-bold text-gray-600 bg-gray-50 hover:bg-amber-50 hover:text-amber-600 rounded-xl border border-gray-100 transition-all group/regen"
+                      className="flex items-center gap-2 px-4 py-2 text-xs font-bold text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-xl border border-gray-200 transition-all"
                     >
-
-                      <RefreshCw size={14} className="group-hover/regen:rotate-180 transition-transform duration-500" />
+                      <RefreshCw size={14} />
                       Regenerate
                     </button>
                     <button 
                       onClick={() => handleRevokeApp(app.id)}
-                      className="flex items-center gap-2 px-4 py-2 text-xs font-bold text-red-500 bg-gray-50 hover:bg-red-50 rounded-xl border border-gray-100 transition-all"
+                      className="flex items-center gap-2 px-4 py-2 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 rounded-xl transition-all"
                     >
                       <Trash2 size={14} />
-                      Revoke Access
+                      Revoke
                     </button>
                  </div>
-               </div>
-               
-               <div className="mt-8 pt-6 border-t border-gray-50 flex items-center justify-between">
-                  <div className="flex items-center gap-6">
-                     <div className="flex items-center gap-1.5 text-xs font-bold text-gray-400 group-hover:text-amber-600 transition-colors cursor-default">
-                        <ShieldCheck size={14} />
-                        RBAC Enabled
-                     </div>
-                  </div>
-                  <button className="flex items-center gap-1 text-xs font-black text-gray-400 hover:text-amber-600 hover:gap-2 transition-all uppercase tracking-widest">
-                    Integration Guide
-                    <ChevronRight size={14} />
-                  </button>
                </div>
             </div>
           ))
@@ -274,62 +256,57 @@ const Applications = () => {
 
       {/* Register Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm animate-in fade-in duration-300">
-          <div className="bg-white rounded-4xl w-full max-w-lg overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
-            <div className="px-8 py-6 bg-amber-600 flex items-center justify-between text-white">
-              <div className="flex items-center gap-3">
-                 <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
-                    <Cpu size={20} />
-                 </div>
-                 <h2 className="text-xl font-black tracking-tight">Register New App</h2>
-              </div>
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-300">
+          <div className="bg-white p-8 rounded-3xl shadow-2xl w-full max-w-lg border border-gray-100 animate-in zoom-in-95 duration-300">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-bold text-gray-900">Configure Application</h3>
               <button 
                 onClick={() => setIsModalOpen(false)}
-                className="p-2 hover:bg-white/20 rounded-xl transition-colors"
+                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-xl transition-all"
               >
                 <X size={20} />
               </button>
             </div>
             
-            <form onSubmit={handleAddApp} className="p-8 space-y-6">
-              <div className="space-y-2">
-                <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Application Name</label>
+            <form onSubmit={handleAddApp} className="space-y-5">
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Display Name</label>
                 <input
                   required
                   type="text"
                   placeholder="e.g. Inventory Microservice"
-                  className="w-full px-5 py-3.5 bg-gray-50 border border-transparent focus:bg-white focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 rounded-2xl text-gray-900 font-bold placeholder-gray-300 transition-all outline-none"
+                  className="w-full bg-gray-50 border border-gray-200 p-3.5 rounded-xl focus:ring-2 focus:ring-primary-500 focus:bg-white focus:outline-none transition-all placeholder:text-gray-400 font-medium text-sm text-gray-900"
                   value={newAppName}
                   onChange={(e) => setNewAppName(e.target.value)}
                 />
               </div>
 
-              <div className="space-y-2">
-                <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Description (Optional)</label>
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Description (Optional)</label>
                 <textarea
                   rows="3"
                   placeholder="Summarize the core functionality..."
-                  className="w-full px-5 py-3.5 bg-gray-50 border border-transparent focus:bg-white focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 rounded-2xl text-gray-900 font-bold placeholder-gray-300 transition-all outline-none resize-none"
+                  className="w-full bg-gray-50 border border-gray-200 p-3.5 rounded-xl focus:ring-2 focus:ring-primary-500 focus:bg-white focus:outline-none transition-all placeholder:text-gray-400 font-medium text-sm text-gray-900 resize-none"
                   value={newAppDesc}
                   onChange={(e) => setNewAppDesc(e.target.value)}
                 />
               </div>
 
-              <div className="pt-4 flex items-center gap-4">
+              <div className="flex justify-end gap-3 pt-4">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="flex-1 py-4 px-6 text-gray-500 font-black uppercase tracking-widest text-xs hover:bg-gray-50 rounded-2xl transition-all"
+                  className="px-6 py-3 text-gray-600 font-bold hover:bg-gray-100 rounded-xl transition-colors text-sm"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={addingApp}
-                  className="flex-2 py-4 px-6 bg-amber-600 text-white font-black uppercase tracking-widest text-xs rounded-2xl shadow-xl shadow-amber-500/20 hover:bg-amber-700 transition-all active:scale-95 flex items-center justify-center gap-2"
+                  className="px-8 py-3 bg-primary-600 text-white font-bold rounded-xl hover:bg-primary-700 shadow-lg shadow-primary-500/20 active:scale-95 transition-all text-sm disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {addingApp ? <Loader2 className="animate-spin" size={16} /> : null}
-                  {addingApp ? 'Registering...' : 'Confirm Registration'}
+                  {addingApp ? 'Registering...' : 'Generate Credentials'}
                 </button>
               </div>
             </form>
@@ -339,77 +316,57 @@ const Applications = () => {
 
       {/* Success Modal (One-time reveal) */}
       {successDetails && (
-        <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-gray-900/80 backdrop-blur-md animate-in fade-in duration-500 overflow-y-auto">
-          <div className="bg-white rounded-[2.5rem] w-full max-w-2xl my-auto overflow-hidden shadow-2xl animate-in zoom-in-95 duration-500 relative flex flex-col max-h-[95vh]">
-            <div className="px-10 py-8 bg-emerald-600 text-white shrink-0 relative">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32 blur-3xl" />
-              <div className="relative z-10 flex flex-col items-center text-center">
-                 <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-emerald-600 shadow-2xl mb-4">
-                    <ShieldCheck size={32} />
-                 </div>
-                 <h2 className="text-2xl font-black tracking-tighter mb-1 italic">Credentials Generated</h2>
-                 <p className="text-emerald-50 text-[10px] font-black uppercase tracking-[0.2em] opacity-80">Store these securely immediately</p>
-              </div>
-            </div>
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-300">
+          <div className="bg-white p-8 rounded-3xl shadow-2xl w-full max-w-lg border border-gray-100 animate-in zoom-in-95 duration-300">
+            <h3 className="text-2xl font-bold mb-6 text-gray-900">Application Credentials</h3>
             
-            <div className="p-8 space-y-6 overflow-y-auto custom-scrollbar">
-              <div className="grid grid-cols-1 gap-5">
-                 {/* App ID */}
-                 <div className="space-y-2">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">System App ID</label>
-                    <div className="flex items-center gap-3">
-                       <code className="bg-gray-50 border border-gray-100 p-3.5 rounded-xl text-[11px] font-mono text-gray-600 flex-1 select-all break-all">
-                          {successDetails.id}
-                       </code>
-                       <button onClick={() => copyToClipboard(successDetails.id)} className="p-3.5 bg-gray-50 hover:bg-emerald-50 hover:text-emerald-600 rounded-xl transition-all">
-                          {copiedKey === successDetails.id ? <CheckCircle size={18} /> : <Copy size={18} />}
+            <div className="space-y-5">
+              <div className="bg-amber-50 p-4 rounded-xl border border-amber-200 flex gap-3 items-start">
+                <ShieldCheck className="text-amber-600 shrink-0 mt-0.5" size={20} />
+                <div>
+                  <p className="font-bold text-amber-900 text-sm">Security Warning!</p>
+                  <p className="text-xs text-amber-800 font-medium mt-1 leading-relaxed">
+                    Please copy these credentials immediately. The <span className="underline font-bold">API Secret</span> will not be displayed again.
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                 <div className="bg-gray-50 p-3.5 rounded-xl border border-gray-200">
+                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider block mb-1">System App ID</label>
+                    <div className="flex items-center justify-between gap-2">
+                       <code className="text-xs font-mono text-gray-700 break-all select-all">{successDetails.id}</code>
+                       <button onClick={() => copyToClipboard(successDetails.id)} className="text-gray-400 hover:text-primary-600">
+                          {copiedKey === successDetails.id ? <CheckCircle size={16} className="text-emerald-500" /> : <Copy size={16} />}
                        </button>
                     </div>
                  </div>
 
-                 {/* API Key */}
-                 <div className="space-y-2">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Public API Key (Client ID)</label>
-                    <div className="flex items-center gap-3">
-                       <code className="bg-gray-50 border border-gray-100 p-3.5 rounded-xl text-[11px] font-mono text-gray-600 flex-1 select-all break-all">
-                          {successDetails.client_id}
-                       </code>
-                       <button onClick={() => copyToClipboard(successDetails.client_id)} className="p-3.5 bg-gray-50 hover:bg-emerald-50 hover:text-emerald-600 rounded-xl transition-all">
-                          {copiedKey === successDetails.client_id ? <CheckCircle size={18} /> : <Copy size={18} />}
+                 <div className="bg-gray-50 p-3.5 rounded-xl border border-gray-200">
+                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider block mb-1">Public API Key (Client ID)</label>
+                    <div className="flex items-center justify-between gap-2">
+                       <code className="text-xs font-mono text-gray-700 break-all select-all">{successDetails.client_id}</code>
+                       <button onClick={() => copyToClipboard(successDetails.client_id)} className="text-gray-400 hover:text-primary-600">
+                          {copiedKey === successDetails.client_id ? <CheckCircle size={16} className="text-emerald-500" /> : <Copy size={16} />}
                        </button>
                     </div>
                  </div>
 
-                 {/* API Secret */}
-                 <div className="space-y-2 text-left">
-                    <label className="text-[10px] font-black text-emerald-600 uppercase tracking-widest ml-1">One-Time API Secret (Never Shown Again)</label>
-                    <div className="flex items-center gap-3 group">
-                       <code className="bg-emerald-50 border-2 border-emerald-100 p-4 rounded-xl text-xs font-mono text-emerald-700 flex-1 select-all break-all font-black shadow-inner">
-                          {successDetails.api_secret}
-                       </code>
-                       <button onClick={() => copyToClipboard(successDetails.api_secret)} className="p-4 bg-emerald-600 text-white hover:bg-emerald-700 rounded-xl shadow-xl shadow-emerald-600/20 transition-all active:scale-95">
-                          {copiedKey === successDetails.api_secret ? <CheckCircle size={20} /> : <Copy size={20} />}
+                 <div className="bg-emerald-50 p-3.5 rounded-xl border border-emerald-200">
+                    <label className="text-xs font-bold text-emerald-700 uppercase tracking-wider block mb-1">One-Time API Secret</label>
+                    <div className="flex items-center justify-between gap-2">
+                       <code className="text-xs font-mono text-emerald-900 font-bold break-all select-all">{successDetails.api_secret}</code>
+                       <button onClick={() => copyToClipboard(successDetails.api_secret)} className="text-emerald-600 hover:text-emerald-800">
+                          {copiedKey === successDetails.api_secret ? <CheckCircle size={16} className="text-emerald-600" /> : <Copy size={16} />}
                        </button>
                     </div>
                  </div>
               </div>
 
-              <div className="bg-amber-50 border border-amber-100 p-5 rounded-2xl flex gap-4">
-                 <div className="shrink-0 text-amber-600 pt-1">
-                    <Loader2 size={20} className="animate-spin" />
-                 </div>
-                 <div>
-                    <h4 className="text-[11px] font-black text-amber-900 uppercase tracking-tight mb-1">Security Warning</h4>
-                    <p className="text-amber-800 text-[11px] font-medium leading-relaxed">
-                       This secret key will NOT be displayed again. If you lose it, you must regenerate it, which will decouple any active integrations.
-                    </p>
-                 </div>
-              </div>
-
-              <div className="pt-2">
+              <div className="pt-3">
                  <button
                    onClick={() => setSuccessDetails(null)}
-                   className="w-full py-4 bg-gray-900 text-white font-black uppercase tracking-[0.2em] text-[11px] rounded-xl hover:bg-black transition-all active:scale-[0.98] shadow-xl"
+                   className="w-full py-3.5 bg-gray-900 text-white font-bold text-sm rounded-xl hover:bg-black transition-all active:scale-[0.98]"
                  >
                    I Have Saved These Credentials
                  </button>
@@ -421,65 +378,60 @@ const Applications = () => {
 
       {/* Edit App Modal */}
       {isEditModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm animate-in fade-in duration-300">
-          <div className="bg-white rounded-4xl w-full max-w-lg overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
-            <div className="px-8 py-6 bg-amber-600 flex items-center justify-between text-white">
-              <div className="flex items-center gap-3">
-                 <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
-                    <Edit3 size={20} />
-                 </div>
-                 <h2 className="text-xl font-black tracking-tight">Edit Application Name</h2>
-              </div>
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-300">
+          <div className="bg-white p-8 rounded-3xl shadow-2xl w-full max-w-lg border border-gray-100 animate-in zoom-in-95 duration-300">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-bold text-gray-900">Edit Application Details</h3>
               <button 
                 onClick={() => {
                   setIsEditModalOpen(false);
                   setEditingApp(null);
                 }}
-                className="p-2 hover:bg-white/20 rounded-xl transition-colors"
+                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-xl transition-all"
               >
                 <X size={20} />
               </button>
             </div>
             
-            <form onSubmit={handleUpdateApp} className="p-8 space-y-6">
-              <div className="space-y-2">
-                <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Application Name</label>
+            <form onSubmit={handleUpdateApp} className="space-y-5">
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Display Name</label>
                 <input
                   required
                   type="text"
                   placeholder="e.g. Inventory Microservice"
-                  className="w-full px-5 py-3.5 bg-gray-50 border border-transparent focus:bg-white focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 rounded-2xl text-gray-900 font-bold placeholder-gray-300 transition-all outline-none"
+                  className="w-full bg-gray-50 border border-gray-200 p-3.5 rounded-xl focus:ring-2 focus:ring-primary-500 focus:bg-white focus:outline-none transition-all placeholder:text-gray-400 font-medium text-sm text-gray-900"
                   value={editAppName}
                   onChange={(e) => setEditAppName(e.target.value)}
                 />
               </div>
 
-              <div className="space-y-2">
-                <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Description</label>
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Description</label>
                 <textarea
                   rows="3"
                   placeholder="Summarize the core functionality..."
-                  className="w-full px-5 py-3.5 bg-gray-50 border border-transparent focus:bg-white focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 rounded-2xl text-gray-900 font-bold placeholder-gray-300 transition-all outline-none resize-none"
+                  className="w-full bg-gray-50 border border-gray-200 p-3.5 rounded-xl focus:ring-2 focus:ring-primary-500 focus:bg-white focus:outline-none transition-all placeholder:text-gray-400 font-medium text-sm text-gray-900 resize-none"
                   value={editAppDesc}
                   onChange={(e) => setEditAppDesc(e.target.value)}
                 />
               </div>
 
-              <div className="pt-4 flex items-center gap-4">
+              <div className="flex justify-end gap-3 pt-4">
                 <button
                   type="button"
                   onClick={() => {
                     setIsEditModalOpen(false);
                     setEditingApp(null);
                   }}
-                  className="flex-1 py-4 px-6 text-gray-500 font-black uppercase tracking-widest text-xs hover:bg-gray-50 rounded-2xl transition-all"
+                  className="px-6 py-3 text-gray-600 font-bold hover:bg-gray-100 rounded-xl transition-colors text-sm"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={updatingApp}
-                  className="flex-2 py-4 px-6 bg-amber-600 text-white font-black uppercase tracking-widest text-xs rounded-2xl shadow-xl shadow-amber-500/20 hover:bg-amber-700 transition-all active:scale-95 flex items-center justify-center gap-2"
+                  className="px-8 py-3 bg-primary-600 text-white font-bold rounded-xl hover:bg-primary-700 shadow-lg shadow-primary-500/20 active:scale-95 transition-all text-sm disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {updatingApp ? <Loader2 className="animate-spin" size={16} /> : null}
                   {updatingApp ? 'Saving...' : 'Save Changes'}
@@ -489,10 +441,9 @@ const Applications = () => {
           </div>
         </div>
       )}
-
-
     </div>
   );
 };
 
 export default Applications;
+

@@ -199,85 +199,73 @@ const Roles = () => {
   };
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-700">
-      <header className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-           <div className="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm">
-              <ShieldCheck size={24} />
-           </div>
-           <div>
-              <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight leading-none mb-1">Roles & Permissions</h1>
-              <p className="text-gray-500 text-sm font-medium">Define access control tiers and fine-grained resource permissions.</p>
-           </div>
+    <div className="space-y-6">
+      <div className="flex justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900 tracking-tight">System Roles</h2>
+          <p className="text-gray-500 text-sm mt-1">Configure user role tiers and assigned resource permissions.</p>
         </div>
         <button 
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 px-5 py-2.5 bg-emerald-600 text-white text-sm font-bold rounded-xl shadow-lg shadow-emerald-500/30 hover:bg-emerald-700 transition-all active:scale-95"
+          className="bg-primary-600 text-white px-5 py-2.5 rounded-xl font-bold flex items-center gap-2 hover:bg-primary-700 shadow-lg shadow-primary-500/20 active:scale-95 transition-all"
         >
           <Plus size={18} />
           <span>Create New Role</span>
         </button>
-      </header>
+      </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         {loading ? (
-          <div className="col-span-full py-20 text-center font-bold text-gray-400 uppercase tracking-widest animate-pulse">
-             Accessing Access Control Layers...
+          <div className="col-span-full py-16 text-center text-gray-400 font-medium italic">
+             Loading role configuration data...
           </div>
         ) : roles.length === 0 ? (
-          <div className="col-span-full bg-white rounded-3xl p-12 text-center border-2 border-dashed border-gray-100 shadow-sm flex flex-col items-center">
-             <ShieldAlert className="text-gray-200 mb-4" size={60} />
-             <p className="text-gray-400 font-bold uppercase tracking-widest">No roles defined in the system</p>
-             <p className="text-gray-300 text-sm mt-1">Start by creating a root or basic role.</p>
+          <div className="col-span-full bg-white rounded-2xl p-12 text-center border border-dashed border-gray-200 flex flex-col items-center">
+             <ShieldAlert className="text-gray-300 mb-3" size={48} />
+             <p className="text-gray-500 font-bold">No roles defined in the system</p>
+             <p className="text-gray-400 text-sm mt-1">Start by creating a system role.</p>
           </div>
         ) : (
           roles.map(role => (
-            <div key={role.id} className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 group hover:-translate-y-1">
-              <div className="flex items-center justify-between mb-8">
+            <div key={role.id} className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+              <div className="flex items-center justify-between mb-4">
                  <div className="flex items-center gap-3">
-                   <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300">
+                   <div className="w-10 h-10 bg-primary-50 rounded-xl flex items-center justify-center text-primary-600">
                       <Lock size={20} />
                    </div>
                    <h3 className="text-xl font-bold text-gray-900 tracking-tight">{role.name}</h3>
                  </div>
-                 <div className="flex gap-2">
-                    <button className="p-2 text-gray-400 hover:text-emerald-600 transition-colors">
-                      <Zap size={18} />
-                    </button>
-                    <button className="p-2 text-gray-400 hover:text-red-600 transition-colors">
+                 <div className="flex gap-1">
+                    <button className="p-2 text-gray-400 hover:text-red-600 transition-colors" title="Delete Role">
                       <Trash2 size={18} />
                     </button>
                  </div>
               </div>
               
-              <p className="text-sm font-medium text-gray-500 mb-6 italic">{role.description || 'No description provided for this tier.'}</p>
+              <p className="text-sm font-medium text-gray-500 mb-6 italic">{role.description || 'No description provided.'}</p>
               
-              <div className="space-y-4">
-                 <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] flex items-center gap-2">
+              <div className="space-y-3">
+                 <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
                    Active Permissions
-                   <div className="flex-1 h-px bg-gray-50" />
+                   <div className="flex-1 h-px bg-gray-100" />
                  </h4>
-                 <div className="flex flex-wrap gap-2">
+                 <div className="flex flex-wrap gap-1.5">
                     {role.permissions?.length > 0 ? (
                       role.permissions.map(perm => (
-                        <div key={perm.id} className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 text-gray-600 rounded-xl border border-gray-100 hover:border-emerald-200 hover:bg-emerald-50 transition-colors">
-                          <span className="text-[10px] font-bold uppercase tracking-wider">{perm.resource}:{perm.action}</span>
+                        <div key={perm.id} className="flex items-center gap-1 px-3 py-1 bg-gray-50 text-gray-700 rounded-lg border border-gray-200 text-xs font-semibold">
+                          <span>{perm.resource}:{perm.action}</span>
                         </div>
                       ))
                     ) : (
-                      <span className="text-xs text-gray-300 italic">No direct permissions assigned</span>
+                      <span className="text-xs text-gray-400 italic">No permissions assigned</span>
                     )}
                  </div>
               </div>
 
-              <div className="mt-8 pt-6 border-t border-gray-50 flex items-center justify-between">
-                 <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest italic leading-none">
-                    Security Level: {role.name === 'admin' ? 'Root Tier' : 'Standard Tier'}
+              <div className="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
+                 <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">
+                    Tier: {role.name === 'admin' ? 'Root Administrator' : 'Standard User'}
                  </span>
-                 <button className="flex items-center gap-1 text-xs font-bold text-emerald-600 hover:gap-2 transition-all">
-                   Modify Access Rules
-                   <ChevronRight size={14} />
-                 </button>
               </div>
             </div>
           ))
@@ -295,4 +283,5 @@ const Roles = () => {
 };
 
 export default Roles;
+
 

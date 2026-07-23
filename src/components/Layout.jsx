@@ -14,7 +14,6 @@ import {
 import { useAuth } from '../context/AuthContext';
 import { cn } from '../utils/cn';
 
-
 const SidebarItem = ({ to, icon: Icon, label }) => (
   <NavLink
     to={to}
@@ -69,12 +68,14 @@ const Layout = ({ children }) => {
 
       {/* Main Content */}
       <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-end px-8 shrink-0 shadow-sm z-10">
-
+        <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-8 shrink-0 shadow-sm z-10">
+          <div className="flex items-center gap-4">
+            <h2 className="text-xl font-semibold text-gray-800 tracking-tight">User Management System</h2>
+          </div>
           <div className="flex items-center gap-4">
             <div className="text-right">
-              <p className="text-sm font-semibold text-gray-900 leading-none">{user?.full_name}</p>
-              <p className="text-xs text-gray-500 font-medium mt-1">{user?.email}</p>
+              <p className="text-sm font-semibold text-gray-900 leading-none">{user?.full_name || 'Admin'}</p>
+              <p className="text-xs text-gray-500 font-medium mt-1">{user?.email || 'admin@svarp.com'}</p>
             </div>
             <div className="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-700 font-bold border-2 border-white shadow-sm">
               {user?.full_name?.[0]?.toUpperCase() || 'U'}
@@ -93,3 +94,4 @@ const Layout = ({ children }) => {
 };
 
 export default Layout;
+

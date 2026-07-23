@@ -37,58 +37,58 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 px-6 lg:px-8 font-sans antialiased">
+    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 px-6 lg:px-8 font-sans">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-600 rounded-2xl shadow-xl shadow-primary-500/30 mb-8 animate-bounce-subtle">
-           <Layers className="text-white" size={32} />
+        <div className="inline-flex items-center justify-center w-14 h-14 bg-primary-600 rounded-2xl shadow-lg shadow-primary-500/20 mb-6">
+           <Layers className="text-white" size={28} />
         </div>
-        <h2 className="text-4xl font-extrabold text-gray-900 tracking-tight leading-none mb-3">
-          Welcome Back
+        <h2 className="text-3xl font-bold text-gray-900 tracking-tight">
+          User Management Portal
         </h2>
-        <p className="text-gray-500 font-medium tracking-wide">
-          Enter your credentials to access the portal
+        <p className="text-gray-500 font-medium text-sm mt-2">
+          Enter your credentials to access portal management
         </p>
       </div>
 
-      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-10 px-8 border border-gray-100 shadow-2xl rounded-3xl backdrop-blur-sm">
-          <form className="space-y-6" onSubmit={handleSubmit}>
+      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="bg-white py-8 px-8 border border-gray-100 shadow-xl rounded-3xl">
+          <form className="space-y-5" onSubmit={handleSubmit}>
             {error && (
-              <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-xl flex items-center gap-3 animate-in fade-in zoom-in duration-300">
-                <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center shrink-0">
-                  <span className="text-red-600 font-bold">!</span>
+              <div className="bg-red-50 border border-red-200 p-4 rounded-xl flex items-center gap-3">
+                <div className="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center shrink-0">
+                  <span className="text-red-600 font-bold text-xs">!</span>
                 </div>
-                <p className="text-sm text-red-700 font-medium">{error}</p>
+                <p className="text-xs text-red-700 font-medium">{error}</p>
               </div>
             )}
             
-            <div className="space-y-1">
-              <label className="text-sm font-bold text-gray-700 ml-1">Email Address</label>
-              <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary-500 transition-colors">
+            <div>
+              <label className="block text-sm font-bold text-gray-700 mb-2">Email Address</label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
                   <Mail size={18} />
                 </div>
                 <input
                   type="email"
                   required
-                  className="block w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-transparent focus:bg-white focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 rounded-2xl text-gray-900 font-medium placeholder-gray-400 transition-all duration-200 outline-none"
-                  placeholder="name@example.com"
+                  className="w-full bg-gray-50 border border-gray-200 pl-11 pr-4 py-3 rounded-xl focus:ring-2 focus:ring-primary-500 focus:bg-white focus:outline-none transition-all placeholder:text-gray-400 font-medium text-sm text-gray-900"
+                  placeholder="admin@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
             </div>
 
-            <div className="space-y-1">
-              <label className="text-sm font-bold text-gray-700 ml-1">Password</label>
-              <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary-500 transition-colors">
+            <div>
+              <label className="block text-sm font-bold text-gray-700 mb-2">Password</label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
                   <Lock size={18} />
                 </div>
                 <input
                   type="password"
                   required
-                  className="block w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-transparent focus:bg-white focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 rounded-2xl text-gray-900 font-medium placeholder-gray-400 transition-all duration-200 outline-none"
+                  className="w-full bg-gray-50 border border-gray-200 pl-11 pr-4 py-3 rounded-xl focus:ring-2 focus:ring-primary-500 focus:bg-white focus:outline-none transition-all placeholder:text-gray-400 font-medium text-sm text-gray-900"
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -99,22 +99,15 @@ const Login = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex justify-center items-center py-4 px-6 border border-transparent rounded-2xl shadow-xl text-md font-bold text-white bg-primary-600 hover:bg-primary-700 hover:shadow-primary-500/40 focus:outline-none focus:ring-4 focus:ring-primary-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform active:scale-[0.98]"
+              className="w-full flex justify-center items-center py-3.5 px-6 rounded-xl shadow-lg shadow-primary-500/20 text-sm font-bold text-white bg-primary-600 hover:bg-primary-700 active:scale-95 disabled:opacity-50 transition-all mt-2"
             >
               {loading ? (
-                <Loader2 className="animate-spin -ml-1 mr-2" size={20} />
+                <Loader2 className="animate-spin -ml-1 mr-2" size={18} />
               ) : null}
               {loading ? 'Authenticating...' : 'Sign In'}
             </button>
           </form>
         </div>
-
-        <p className="mt-8 text-center text-sm text-gray-500 font-medium">
-          Forgot your password?{' '}
-          <a href="#" className="font-bold text-primary-600 hover:text-primary-500 transition-colors underline decoration-2 underline-offset-4">
-            Reset it here
-          </a>
-        </p>
       </div>
     </div>
   );
