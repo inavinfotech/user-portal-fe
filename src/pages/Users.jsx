@@ -14,8 +14,10 @@ import {
   Loader2,
   Lock,
   User as UserIcon,
-  Eye
+  Eye,
+  Cpu
 } from 'lucide-react';
+
 import { cn } from '../utils/cn';
 import { useNavigate } from 'react-router-dom';
 
@@ -329,17 +331,18 @@ const Users = () => {
               <tr className="bg-gray-50/50 border-b border-gray-100">
                 <th className="px-8 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">User Details</th>
                 <th className="px-8 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Roles</th>
+                <th className="px-8 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Created Via</th>
                 <th className="px-8 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest text-center">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
               {loading ? (
                 <tr>
-                   <td colSpan="3" className="px-8 py-12 text-center text-gray-400 font-bold uppercase tracking-widest">Loading Resources...</td>
+                   <td colSpan="4" className="px-8 py-12 text-center text-gray-400 font-bold uppercase tracking-widest">Loading Resources...</td>
                 </tr>
               ) : filteredUsers.length === 0 ? (
                 <tr>
-                  <td colSpan="3" className="px-8 py-12 text-center text-gray-400 font-bold uppercase tracking-widest">No users found in portal</td>
+                  <td colSpan="4" className="px-8 py-12 text-center text-gray-400 font-bold uppercase tracking-widest">No users found in portal</td>
                 </tr>
               ) : (
                 filteredUsers.map(user => (
@@ -368,6 +371,20 @@ const Users = () => {
                       </div>
                     </td>
                     <td className="px-8 py-5">
+                      {user.creation_source === 'EXTERNAL_API' || user.created_by_app_id ? (
+                        <div className="flex items-center gap-1.5 px-3 py-1 bg-amber-50 text-amber-700 text-[11px] font-bold rounded-xl border border-amber-200/60 w-fit">
+                          <Cpu size={14} className="text-amber-600 shrink-0" />
+                          <span>{user.created_by_app_name || 'External API'}</span>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-1.5 px-3 py-1 bg-blue-50 text-blue-700 text-[11px] font-bold rounded-xl border border-blue-100 w-fit">
+                          <UsersIcon size={14} className="text-blue-600 shrink-0" />
+                          <span>Portal Admin</span>
+                        </div>
+                      )}
+                    </td>
+                    <td className="px-8 py-5">
+
                        <div className="flex items-center justify-center gap-2">
                           <button 
                             onClick={() => navigate(`/users/${user.id}`)}

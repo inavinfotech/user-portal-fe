@@ -10,6 +10,7 @@ import {
   ArrowLeft,
   Loader2,
   Phone,
+  Cpu
 } from 'lucide-react';
 import { cn } from '../utils/cn';
 
@@ -116,7 +117,45 @@ const UserDetailsPage = () => {
               )}
             </div>
           </div>
+
+          {/* Account Origin Card */}
+          <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8">
+            <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-6 flex items-center gap-2">
+              <Cpu size={16} className="text-amber-600" />
+              Creation & API Origin
+            </h3>
+            <div className="space-y-4 text-sm">
+              <div className="flex items-center justify-between">
+                <span className="text-gray-400 font-bold uppercase tracking-wider text-[10px]">Creation Source</span>
+                <span className={cn(
+                  "px-2.5 py-1 rounded-lg text-[10px] font-extrabold uppercase tracking-wider",
+                  user.creation_source === 'EXTERNAL_API' || user.created_by_app_id
+                    ? "bg-amber-50 text-amber-700 border border-amber-200/60"
+                    : "bg-blue-50 text-blue-700 border border-blue-100"
+                )}>
+                  {user.creation_source === 'EXTERNAL_API' || user.created_by_app_id ? 'External API Key' : 'Portal Admin'}
+                </span>
+              </div>
+
+              {user.created_by_app_name && (
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-400 font-bold uppercase tracking-wider text-[10px]">App Name</span>
+                  <span className="text-gray-900 font-bold">{user.created_by_app_name}</span>
+                </div>
+              )}
+
+              {user.created_by_app_id && (
+                <div className="flex flex-col gap-1 pt-2 border-t border-gray-50">
+                  <span className="text-gray-400 font-bold uppercase tracking-wider text-[10px]">Application ID</span>
+                  <code className="px-2.5 py-1 bg-gray-50 border border-gray-100 rounded-lg text-[11px] font-mono text-gray-600 break-all select-all">
+                    {user.created_by_app_id}
+                  </code>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
+
 
         {/* Addresses Section */}
         <div className="lg:col-span-2 space-y-6">

@@ -11,7 +11,8 @@ import {
   ShieldCheck,
   ChevronRight,
   X,
-  Loader2
+  Loader2,
+  Edit3
 } from 'lucide-react';
 
 const Applications = () => {
@@ -24,9 +25,17 @@ const Applications = () => {
   const [newAppName, setNewAppName] = useState('');
   const [newAppDesc, setNewAppDesc] = useState('');
   const [addingApp, setAddingApp] = useState(false);
+
+  // Edit Modal State
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingApp, setEditingApp] = useState(null);
+  const [editAppName, setEditAppName] = useState('');
+  const [editAppDesc, setEditAppDesc] = useState('');
+  const [updatingApp, setUpdatingApp] = useState(false);
   
   // Success Modal State
   const [successDetails, setSuccessDetails] = useState(null);
+
 
   useEffect(() => {
     fetchApps();
@@ -65,6 +74,34 @@ const Applications = () => {
       setAddingApp(false);
     }
   };
+
+  const openEditModal = (app) => {
+    setEditingApp(app);
+    setEditAppName(app.name || '');
+    setEditAppDesc(app.description || '');
+    setIsEditModalOpen(true);
+  };
+
+  const handleUpdateApp = async (e) => {
+    e.preventDefault();
+    if (!editingApp) return;
+    setUpdatingApp(true);
+    try {
+      await api.put(`/applications/${editingApp.id}`, {
+        name: editAppName,
+        description: editAppDesc
+      });
+      setIsEditModalOpen(false);
+      setEditingApp(null);
+      fetchApps();
+    } catch (error) {
+      const message = error.response?.data?.detail || 'Failed to update application';
+      alert(message);
+    } finally {
+      setUpdatingApp(false);
+    }
+  };
+
 
   const handleRevokeApp = async (appId) => {
     if (!window.confirm('CRITICAL: revoking this application will permanently disable its credentials. This action cannot be undone.')) return;
@@ -194,9 +231,17 @@ const Applications = () => {
 
                  <div className="flex flex-row lg:flex-col items-center lg:items-end gap-3 shrink-0 pt-4 lg:pt-0">
                     <button 
+                      onClick={() => openEditModal(app)}
+                      className="flex items-center gap-2 px-4 py-2 text-xs font-bold text-amber-600 bg-amber-50 hover:bg-amber-100 rounded-xl border border-amber-100 transition-all"
+                    >
+                      <Edit3 size={14} />
+                      Edit Name
+                    </button>
+                    <button 
                       onClick={() => regenerateKey(app.client_id)}
                       className="flex items-center gap-2 px-4 py-2 text-xs font-bold text-gray-600 bg-gray-50 hover:bg-amber-50 hover:text-amber-600 rounded-xl border border-gray-100 transition-all group/regen"
                     >
+
                       <RefreshCw size={14} className="group-hover/regen:rotate-180 transition-transform duration-500" />
                       Regenerate
                     </button>
@@ -373,6 +418,78 @@ const Applications = () => {
           </div>
         </div>
       )}
+
+      {/* Edit App Modal */}
+      {isEditModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm animate-in fade-in duration-300">
+          <div className="bg-white rounded-4xl w-full max-w-lg overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
+            <div className="px-8 py-6 bg-amber-600 flex items-center justify-between text-white">
+              <div className="flex items-center gap-3">
+                 <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                    <Edit3 size={20} />
+                 </div>
+                 <h2 className="text-xl font-black tracking-tight">Edit Application Name</h2>
+              </div>
+              <button 
+                onClick={() => {
+                  setIsEditModalOpen(false);
+                  setEditingApp(null);
+                }}
+                className="p-2 hover:bg-white/20 rounded-xl transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            
+            <form onSubmit={handleUpdateApp} className="p-8 space-y-6">
+              <div className="space-y-2">
+                <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Application Name</label>
+                <input
+                  required
+                  type="text"
+                  placeholder="e.g. Inventory Microservice"
+                  className="w-full px-5 py-3.5 bg-gray-50 border border-transparent focus:bg-white focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 rounded-2xl text-gray-900 font-bold placeholder-gray-300 transition-all outline-none"
+                  value={editAppName}
+                  onChange={(e) => setEditAppName(e.target.value)}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Description</label>
+                <textarea
+                  rows="3"
+                  placeholder="Summarize the core functionality..."
+                  className="w-full px-5 py-3.5 bg-gray-50 border border-transparent focus:bg-white focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 rounded-2xl text-gray-900 font-bold placeholder-gray-300 transition-all outline-none resize-none"
+                  value={editAppDesc}
+                  onChange={(e) => setEditAppDesc(e.target.value)}
+                />
+              </div>
+
+              <div className="pt-4 flex items-center gap-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsEditModalOpen(false);
+                    setEditingApp(null);
+                  }}
+                  className="flex-1 py-4 px-6 text-gray-500 font-black uppercase tracking-widest text-xs hover:bg-gray-50 rounded-2xl transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={updatingApp}
+                  className="flex-2 py-4 px-6 bg-amber-600 text-white font-black uppercase tracking-widest text-xs rounded-2xl shadow-xl shadow-amber-500/20 hover:bg-amber-700 transition-all active:scale-95 flex items-center justify-center gap-2"
+                >
+                  {updatingApp ? <Loader2 className="animate-spin" size={16} /> : null}
+                  {updatingApp ? 'Saving...' : 'Save Changes'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
 
     </div>
   );
